@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
-import SearchBox from '../../components/search-box'
+import SearchBox from '../../components/search-box';
+import debounce from '../../utils/debounce';
 
 class SearchBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       value: '',
-    }
-  }
+    };
+
+    this.handleChangeDebounced = debounce(this.props.handleChange, 300);
+  };
+
 
   handleChange = (e) => {
+    console.log('in SearchBar handleChange');
     const value = e.target.value;
-    this.props.handleChange(value);
-    this.setState({value})
+    this.setState({value});
+    this.handleChangeDebounced(value);
   }
 
   render() {
@@ -25,7 +30,7 @@ class SearchBar extends Component {
         />
       </div>
     );
-  }
+  };
 };
 
 export default SearchBar;
