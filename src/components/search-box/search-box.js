@@ -10,6 +10,7 @@ class SearchBox extends Component {
         type='text'
         onChange={onChange}
         value={value}
+        placeholder='Enter your search'
       />
     );
   };
