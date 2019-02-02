@@ -11,10 +11,11 @@ class ResultsPanel extends Component {
         className='image-panel'
       >
         {list.length === 0 && <span>No images found</span>}
-        {list.map((image) => (
+        {list.map((image, index) => (
           <ImageItem 
             src={`https://farm${image.farm}.staticflickr.com/${image.server}/${image.id}_${image.secret}_q.jpg`}
             alt={image.title}
+            key={index}
           />
         ))}
       </div>
