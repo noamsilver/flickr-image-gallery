@@ -41,6 +41,7 @@ class Main extends Component {
     console.log('in Main render');
     return (
       <div>
+        <h1>Flickr Gallery</h1>
         <SearchBar
           handleChange={this.handleSearchChange}
         />
