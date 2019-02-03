@@ -5,6 +5,7 @@ const ImageItem = ({ src, alt }) => (
     className='image-item'
     src={src}
     alt={alt}
+    title={alt}
   />
 );
 
