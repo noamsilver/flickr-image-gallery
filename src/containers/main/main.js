@@ -8,6 +8,7 @@ class Main extends Component {
     super(props);
     this.state = {
       list: [],
+      wasSearchPerformed: false,
     };
 
     this.getAllImages = this.getAllImages.bind(this);
@@ -21,6 +22,7 @@ class Main extends Component {
       console.log({allList: list});
       this.setState({
         list: list.photos.photo,
+        wasSearchPerformed: true,
       });
     });
   };
@@ -32,21 +34,28 @@ class Main extends Component {
     } else {
       flickrImageSearch(text).then((list) => {
         console.log({searchList: list})
-        this.setState({list: list.photos.photo})
+        this.setState({
+          list: list.photos.photo,
+          wasSearchPerformed: true,
+        })
       });
     };
   };
 
   render() {
     console.log('in Main render');
+    const { list, wasSearchPerformed } = this.state;
     return (
-      <div>
-        <h1>Flickr Gallery</h1>
-        <SearchBar
-          handleChange={this.handleSearchChange}
-        />
+      <div id='gallery'>
+        <div id='header'>
+          <h1>Flickr Gallery</h1>
+          <SearchBar
+            handleChange={this.handleSearchChange}
+          />
+          </div>
         <ResultsPanel 
-          list={this.state.list}
+          list={list}
+          wasSearchPerformed={wasSearchPerformed}
         />
       </div>
     );
