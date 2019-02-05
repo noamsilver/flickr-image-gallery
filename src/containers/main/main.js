@@ -3,7 +3,7 @@ import EventEmmiter from 'events';
 import throttle from '../../utils/throttle';
 import Header from '../header';
 import ResultsPanel from '../results-panel';
-import { flickrAllImages, flickrImageSearch } from '../../api/search-api';
+import flickrImageSearch from '../../api/search-api';
 
 const events = new EventEmmiter();
 
@@ -16,29 +16,21 @@ class Main extends Component {
       wasSearchPerformed: false,
       changedSearch: false,
       lastPage: 0,
+      error: '',
     };
     
     this.handleScrollChangeThrottled = throttle(this.handleScrollChange, 500);
   };
 
-  getAllImages = async () => {
+  handleSearch = async (text) => {
     this.setState(() => ({ lastPage: 1 }))
-    const currentSearch = await flickrAllImages();
-    currentSearch.text = '';
-    this.setState(() => ({
-      currentSearch,
-      list: currentSearch.photos.photo,
-      wasSearchPerformed: true,
-      changedSearch: true,
-    }));
-  };
-
-  handleSearchChange = async (text) => {
-    if (text === '') {
-      this.getAllImages();
+    const currentSearch = await flickrImageSearch(text, 1);
+    if (currentSearch.err) {
+      this.setState(() => ({
+        error: currentSearch.err,
+        lastPage: 0,
+      }));
     } else {
-      this.setState(() => ({ lastPage: 1 }))
-      const currentSearch = await flickrImageSearch(text, 1);
       currentSearch.text = text;
       this.setState(() => ({
         currentSearch, 
@@ -62,22 +54,27 @@ class Main extends Component {
     if (scrollY > threshold && page < pages && lastPage < page + 1) {
       this.setState(() => ({ lastPage: page + 1 }));
       const newCurrentSearch = await flickrImageSearch(currentSearch.text, page + 1);
-      newCurrentSearch.text = currentSearch.text;
-      this.setState(state => ({
-        currentSearch: newCurrentSearch,
-        list: [
-          ...state.list,
-          ...newCurrentSearch.photos.photo,
-        ]
-      }));
+      if (newCurrentSearch.err) {
+        this.setState(() => ({
+          error: newCurrentSearch.err,
+          lastPage: page,
+        }));
+      } else {
+        newCurrentSearch.text = currentSearch.text;
+        this.setState(state => ({
+          currentSearch: newCurrentSearch,
+          list: [
+            ...state.list,
+            ...newCurrentSearch.photos.photo,
+          ]
+        }));
+      };
     };
   };
 
   componentDidMount = () => {
     window.addEventListener('scroll', this.handleScrollChangeThrottled, false);
-    if (this.state.lastPage === 0) {
-      this.getAllImages();
-    }
+    this.handleSearch('');
   };
 
   componentDidUpdate = () => {
@@ -92,15 +89,16 @@ class Main extends Component {
   };
 
   render() {
-    const { list, wasSearchPerformed } = this.state;
+    const { list, wasSearchPerformed, error } = this.state;
     return (
       <div 
         id='gallery'
         onClick={this.onClick}
       >
         <Header 
-          handleSearchChange={this.handleSearchChange}
+          handleSearch={this.handleSearch}
           events={events}
+          error={error}
         />
         <ResultsPanel 
           list={list}
