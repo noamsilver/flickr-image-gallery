@@ -1,0 +1,12 @@
+#header {
+  background-image: linear-gradient(to bottom, white, transparent);
+  height: 150px;
+  position: fixed;
+  width: 100%;
+  z-index: 99999999999999;
+}
+
+h1 {
+  width: 100%;
+  margin: 20px;
+}

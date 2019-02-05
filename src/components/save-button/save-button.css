@@ -1,0 +1,6 @@
+.save-button {
+  border-radius: 8px;
+  outline: unset;
+  margin-left: 15px;
+  cursor: pointer;
+}

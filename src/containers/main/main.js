@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import SearchBar from '../search-bar';
+import EventEmmiter from 'events';
+import Header from '../header';
 import ResultsPanel from '../results-panel';
 import { flickrAllImages, flickrImageSearch } from '../../api/search-api';
+
+const events = new EventEmmiter();
 
 class Main extends Component {
   constructor(props) {
@@ -10,49 +13,52 @@ class Main extends Component {
       list: [],
       wasSearchPerformed: false,
     };
-
-    this.getAllImages = this.getAllImages.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
+    
     this.getAllImages();
   };
 
-  getAllImages() {
+  getAllImages = () => {
     console.log('in getAllImages');
     flickrAllImages().then((list) => {
       console.log({allList: list});
-      this.setState({
+      this.setState(() => ({
         list: list.photos.photo,
         wasSearchPerformed: true,
-      });
+      }));
     });
   };
 
-  handleSearchChange(text) {
+  handleSearchChange = (text) => {
     console.log('in handleSearchChange', {text});
     if (text === '') {
       this.getAllImages();
     } else {
       flickrImageSearch(text).then((list) => {
         console.log({searchList: list})
-        this.setState({
+        this.setState(() => ({
           list: list.photos.photo,
           wasSearchPerformed: true,
-        })
+        }))
       });
     };
   };
+
+  onClick = () => {
+    events.emit('galleryClick');
+  }
 
   render() {
     console.log('in Main render');
     const { list, wasSearchPerformed } = this.state;
     return (
-      <div id='gallery'>
-        <div id='header'>
-          <h1>Flickr Gallery</h1>
-          <SearchBar
-            handleChange={this.handleSearchChange}
-          />
-          </div>
+      <div 
+        id='gallery'
+        onClick={this.onClick}
+      >
+        <Header 
+          handleSearchChange={this.handleSearchChange}
+          events={events}
+        />
         <ResultsPanel 
           list={list}
           wasSearchPerformed={wasSearchPerformed}

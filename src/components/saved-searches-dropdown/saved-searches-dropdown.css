@@ -1,0 +1,60 @@
+.saved-searches-dropdown {
+  display: relative;
+  position: static;
+}
+
+.saved-searches-dropdown .dropdown-arrow {
+  margin-left: 15px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+.saved-searches-dropdown .dropdown-arrow.flip {
+  transform: rotate(180deg);
+}
+
+.saved-searches-dropdown .dropdown {
+  display: none;
+  background-color: white;
+  border-radius: 8px;
+  min-width: 150px;
+  overflow: auto;
+  box-shadow: 0px 10px 30px 0px slategray;
+}
+
+.saved-searches-dropdown .dropdown.show {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+}
+
+@media screen and (max-width: 1090px) {
+  .saved-searches-dropdown .dropdown.show {
+    position: fixed;
+    right: 0;
+  }
+}
+
+.saved-searches-dropdown .dropdown .dropdown-row-item {
+  cursor: pointer;
+  display: block;
+  align-items: flex-start;
+  background-color: white;
+  padding: 3px 4px;
+}
+
+.saved-searches-dropdown .dropdown .dropdown-row-item:hover {
+  background-color: rgb(196, 188, 237);
+}
+
+.saved-searches-dropdown .dropdown .dropdown-row-item .clear-x {
+  display: inline-block;
+  position: absolute;
+  right: 4px;
+  margin-top: 5px;
+}
+
+.saved-searches-dropdown .dropdown .dropdown-row-item .clear-x:hover {
+  fill: red;
+}
+
