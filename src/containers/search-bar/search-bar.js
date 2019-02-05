@@ -57,6 +57,7 @@ class SearchBar extends Component {
   }
   onSavedItemSelect = (value) => {
     this.handleChange(value);
+    this.hideSavedSearchesDropdown();
   }
 
   hideSavedSearchesDropdown = () => {
