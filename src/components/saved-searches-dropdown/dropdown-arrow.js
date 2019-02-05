@@ -10,9 +10,9 @@ const DropdownArrow = ({ onClick, showDropdown }) => (
       width={30}
       height={40}
       stroke='white'
-      stroke-width='6px'
-      stroke-linecap='round'
-      stroke-opacity='0.6'
+      strokeWidth='8px'
+      strokeLinecap='round'
+      strokeOpacity='0.7'
     />
   </div>
 )

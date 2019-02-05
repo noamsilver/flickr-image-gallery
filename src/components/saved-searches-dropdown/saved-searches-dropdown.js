@@ -17,9 +17,9 @@ const SavedSearchesDropdown = ({ showDropdown, savedSearches, onClick, onSelect,
         {savedSearches.map((value, index) => (
           <DropdownRowItem 
             value={value}
-            index={index}
             onSelect={onSelect}
             onRemove={onRemove}
+            key={index}
           />
         ))}
       </div>

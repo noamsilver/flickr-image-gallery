@@ -1,10 +1,9 @@
 import React from 'react';
 import { ReactComponent as X } from '../../images/clear-x.svg'
 
-const DropdownRowItem = ({value, index, onSelect, onRemove}) => (
+const DropdownRowItem = ({value, onSelect, onRemove}) => (
   <div
     className='dropdown-row-item'
-    key={index}
     onClick={() => onSelect(value)}
   >
     {value}
