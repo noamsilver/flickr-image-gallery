@@ -18,16 +18,13 @@ class Main extends Component {
       lastPage: 0,
     };
     
-    this.handleScrollChangeThrottled = throttle(this.handleScrollChange, 500)
-    this.getAllImages();
+    this.handleScrollChangeThrottled = throttle(this.handleScrollChange, 500);
   };
 
   getAllImages = async () => {
-    console.log('in getAllImages');
     this.setState(() => ({ lastPage: 1 }))
     const currentSearch = await flickrAllImages();
     currentSearch.text = '';
-    console.log({currentSearchAllList: currentSearch});
     this.setState(() => ({
       currentSearch,
       list: currentSearch.photos.photo,
@@ -37,14 +34,12 @@ class Main extends Component {
   };
 
   handleSearchChange = async (text) => {
-    console.log('in handleSearchChange', {text});
     if (text === '') {
       this.getAllImages();
     } else {
       this.setState(() => ({ lastPage: 1 }))
       const currentSearch = await flickrImageSearch(text, 1);
       currentSearch.text = text;
-      console.log({currentSearch});
       this.setState(() => ({
         currentSearch, 
         list: currentSearch.photos.photo,
@@ -59,22 +54,15 @@ class Main extends Component {
   };
 
   handleScrollChange = async () => {
-    console.log('in handleScrollChange', {
-      scrollY: window.scrollY,
-      height: document.body.clientHeight,
-    });
     const { currentSearch, lastPage } = this.state;
     const { page, pages } = this.state.currentSearch.photos;
     const { scrollY } = window;
     const { clientHeight } = document.body;
-    console.log({body: document.body, clientHeight, clientHeight03: clientHeight * 0.3, clientMinus7000: clientHeight - 7000, page, pages});
-    console.log({page, pages, lastPage});
     const threshold = clientHeight > 10000 ? clientHeight - 7000 : clientHeight * 0.3;
     if (scrollY > threshold && page < pages && lastPage < page + 1) {
       this.setState(() => ({ lastPage: page + 1 }));
       const newCurrentSearch = await flickrImageSearch(currentSearch.text, page + 1);
       newCurrentSearch.text = currentSearch.text;
-      console.log({newCurrentSearch, currentSearch: this.state.currentSearch});
       this.setState(state => ({
         currentSearch: newCurrentSearch,
         list: [
@@ -87,6 +75,9 @@ class Main extends Component {
 
   componentDidMount = () => {
     window.addEventListener('scroll', this.handleScrollChangeThrottled, false);
+    if (this.state.lastPage === 0) {
+      this.getAllImages();
+    }
   };
 
   componentDidUpdate = () => {
@@ -101,7 +92,6 @@ class Main extends Component {
   };
 
   render() {
-    console.log('in Main render');
     const { list, wasSearchPerformed } = this.state;
     return (
       <div 

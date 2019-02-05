@@ -45,7 +45,6 @@ class SearchBar extends Component {
   };
 
   handleChange = (value) => {
-    console.log('in SearchBar handleChange');
     this.setState(() => ({value}));
     this.handleChangeDebounced(value);
   }
@@ -67,7 +66,6 @@ class SearchBar extends Component {
   }
 
   render() {
-    console.log('in SearchBar render');
     const { savedSearches, showDropdown } = this.state;
     return (
       <div className='search-bar'>

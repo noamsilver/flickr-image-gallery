@@ -3,7 +3,6 @@ import DropdownRowItem from './dropdown-row-item';
 import DropdownArrow from './dropdown-arrow';
 
 const SavedSearchesDropdown = ({ showDropdown, savedSearches, onClick, onSelect, onRemove }) => {
-  console.log('in SavedSerchesDropdown')
   return (
     <div className='saved-searches-dropdown'>
       <DropdownArrow
